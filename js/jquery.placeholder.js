@@ -40,7 +40,7 @@
 		return $('<input>').attr({
 			placeholder: input.attr('placeholder'),
 			value: input.attr('placeholder'),
-			id: input.attr('id'),
+			id: input.attr('id') + '_polyfill', // needs unique id
 			type: 'text',
 			readonly: true
 		}).addClass(input.attr('class')).addClass('placeholder');
