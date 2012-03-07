@@ -13,37 +13,10 @@
 	if ("placeholder" in document.createElement("input")) return;
 
 	$(document).ready(function(){
-		$(':input[placeholder]').not(':password').each(function() {
-			setupPlaceholder($(this));
-		});
-
-		$(':password[placeholder]').each(function() {
+		$(':input[placeholder]').each(function() {
 			setupPasswords($(this));
 		});
-	   
-		$('form').submit(function(e) {
-			clearPlaceholdersBeforeSubmit($(this));
-		});
 	});
-
-	function setupPlaceholder(input) {
-
-		var placeholderText = input.attr('placeholder');
-
-		setPlaceholderOrFlagChanged(input, placeholderText);
-		input.focus(function(e) {
-			if (input.data('changed') === true) return;
-			if (input.val() === placeholderText) input.val('');
-		}).blur(function(e) {
-			if (input.val() === '') input.val(placeholderText); 
-		}).change(function(e) {
-			input.data('changed', input.val() !== '');
-		});
-	}
-
-	function setPlaceholderOrFlagChanged(input, text) {
-		(input.val() === '') ? input.val(text) : input.data('changed', true);
-	}
 
 	function setupPasswords(input) {
 		var passwordPlaceholder = createPasswordPlaceholder(input);
@@ -56,7 +29,7 @@
 			input.hide();
 			passwordPlaceholder.show();
 		});
-			
+
 		$(passwordPlaceholder).focus(function(e) {
 			input.show().focus();
 			passwordPlaceholder.hide();
@@ -68,14 +41,8 @@
 			placeholder: input.attr('placeholder'),
 			value: input.attr('placeholder'),
 			id: input.attr('id'),
+			type: 'text',
 			readonly: true
-		}).addClass(input.attr('class'));
-	}
-
-	function clearPlaceholdersBeforeSubmit(form) {
-		form.find(':input[placeholder]').each(function() {
-			if ($(this).data('changed') === true) return;
-			if ($(this).val() === $(this).attr('placeholder')) $(this).val('');
-		});
+		}).addClass(input.attr('class')).addClass('placeholder');
 	}
 })(jQuery);
