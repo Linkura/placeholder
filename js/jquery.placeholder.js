@@ -2,7 +2,7 @@
 
 	/**
 	 * Spoofs placeholders in browsers that don't support them (eg Firefox 3)
-	 * 
+	 *
 	 * Copyright 2011 Dan Bentley
 	 * Licensed under the Apache License 2.0
 	 *
@@ -13,36 +13,51 @@
 	if ("placeholder" in document.createElement("input")) return;
 
 	$(document).ready(function(){
-		$(':input[placeholder]').each(function() {
-			setupPasswords($(this));
+		// Add placeholder elements
+		$('input[placeholder]').each(function() {
+			setupInput($(this));
+		});
+
+		// Set up tab index
+		var index = 1;
+		$('input, button').each(function() {
+			$(this).attr('tabindex', index++);
 		});
 	});
 
-	function setupPasswords(input) {
-		var passwordPlaceholder = createPasswordPlaceholder(input);
-		input.after(passwordPlaceholder);
+	function setupInput($input) {
+		var $placeholder = createPlaceholder($input);
 
-		(input.val() === '') ? input.hide() : passwordPlaceholder.hide();
+		$input.after($placeholder);
 
-		$(input).blur(function(e) {
-			if (input.val() !== '') return;
-			input.hide();
-			passwordPlaceholder.show();
+		if ($input.val() === '') {
+			$input.hide();
+		} else {
+			$placeholder.hide();
+		}
+
+		$input.on('blur', function(e) {
+			if ($input.val() !== '')
+				return;
+			$input.hide();
+			$placeholder.show();
 		});
 
-		$(passwordPlaceholder).focus(function(e) {
-			input.show().focus();
-			passwordPlaceholder.hide();
+		$placeholder.on('focus', function(e) {
+			$input.show().focus();
+			$placeholder.hide();
 		});
 	}
 
-	function createPasswordPlaceholder(input) {
+	function createPlaceholder($input) {
 		return $('<input>').attr({
-			placeholder: input.attr('placeholder'),
-			value: input.attr('placeholder'),
-			id: input.attr('id') + '_polyfill', // needs unique id
-			type: 'text',
-			readonly: true
-		}).addClass(input.attr('class')).addClass('placeholder');
+			id: $input.attr('id') + '_polyfill', // needs unique id
+			readonly: true,
+			style: $input.attr('style'),
+			type: $input.prop('type'),
+			value: $input.attr('placeholder')
+		})
+		.addClass($input.attr('class'))
+		.addClass('placeholder');
 	}
 })(jQuery);
