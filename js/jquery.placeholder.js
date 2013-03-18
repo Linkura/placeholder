@@ -28,7 +28,7 @@
 	function setupInput($input) {
 		var $placeholder = createPlaceholder($input);
 
-		$input.after($placeholder);
+		$input.before($placeholder);
 
 		if ($input.val() === '') {
 			$input.hide();
