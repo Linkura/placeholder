@@ -44,8 +44,8 @@
 		});
 
 		$placeholder.on('focus', function(e) {
-			$input.show().focus();
 			$placeholder.hide();
+			$input.show().focus();
 		});
 	}
 
